@@ -25,7 +25,7 @@ SECRET_KEY = '-+6e@p#v+)@6+-2%(x4g3n-xtn6-fe1iy)+u1op@zbd-qz)y^-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'https://q-coder.herokuapp.com/']
 
 
 # Application definition

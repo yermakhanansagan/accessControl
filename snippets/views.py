@@ -1,10 +1,8 @@
 from django.http import HttpResponse, JsonResponse
-from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from snippets.models import Snippet, History, Access
-from snippets.serializers import SnippetSerializer, HistorySerializer, AccessSerializer
-from django.core.exceptions import ObjectDoesNotExist
+from snippets.serializers import SnippetSerializer, HistorySerializer
 
 @csrf_exempt
 def snippet_list(request):

@@ -2,7 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from rest_framework import generics
-from snippets.models import History, Employees, Access, Devices, Snippet
+from snippets.models import History, Employees, Access, Device, Snippet
 from snippets.serializers import PersonalSerializer, EmployeesDetailSerializer, SnippetSerializer, HistorySerializer, DeviceSerializer, EmployeesSerializer
 
 
@@ -65,10 +65,16 @@ def history_list(request):
             card_id = data['card']
             access = Access.objects.create(card_id=card_id)
             access.save()
+        try:
+            device = Device.objects.get(device_ip=data['device'])
+        except Device.DoesNotExist:
+            card_id = data['device']
+            device = Device.objects.create(device_ip=data['device'])
+            device.save()
         serializer = HistorySerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return JsonResponse({"access":access.access}, status=201)
+            return JsonResponse({"access": access.access}, status=201)
         return JsonResponse(serializer.errors, status=400)
 
 
@@ -100,11 +106,11 @@ class DeviceViewSet(generics.ListAPIView):
     # filter_backends = (filters.SearchFilter, )
     # pagination_class = PostPageNumberPagination
     serializer_class = DeviceSerializer
-    queryset = Devices.objects.all()
+    queryset = Device.objects.all()
 
 class DeviceCreateViewSet(generics.CreateAPIView):
     serializer_class = DeviceSerializer
 
 class DeviceDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DeviceSerializer
-    queryset = Devices.objects.all()
+    queryset = Device.objects.all()

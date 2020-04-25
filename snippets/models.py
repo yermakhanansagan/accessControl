@@ -57,24 +57,27 @@ class Access(models.Model):
     def __str__(self):
         return self.card_id
 
+class Device(models.Model):
+    STATUS = (
+        ('IN', 'IN'),
+        ('OUT', 'OUT'),
+    )
+    device_ip = models.CharField(primary_key=True, max_length=30, null=False)
+    serial_number = models.CharField(max_length=30, null=True)
+    device_model = models.CharField(max_length=30, null=True)
+    is_out = models.CharField(max_length=30, null=True, choices=STATUS)
+    check_out = models.DateTimeField(auto_now=True, null=True)
+    def __str__(self):
+        return self.device_model
 
 class History(models.Model):
     STATUS = (
         ('IN', 'IN'),
         ('OUT', 'OUT'),
     )
-    status = models.CharField(max_length=30, null=True, choices=STATUS)
     entry_date = models.DateTimeField(auto_now_add=True, null=True)
     card = models.ForeignKey(Access, on_delete=models.CASCADE, null=True)
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.status
-
-class Devices(models.Model):
-    id = models.AutoField(primary_key=True)
-    serial_number = models.CharField(max_length=30, null=True)
-    device_ip = models.CharField(max_length=30, null=True)
-    device_model = models.CharField(max_length=30, null=True)
-    check_out = models.DateTimeField(auto_now=True, null=True)
-    def __str__(self):
-        return self.device_model
+        return self.device + " " + self.card + " " + self.entry_date

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from snippets.models import History, Access, Employees, Devices, Snippet
+from snippets.models import History, Access, Employees, Device, Snippet
 
 
 class SnippetSerializer(serializers.ModelSerializer):
@@ -32,15 +32,15 @@ class EmployeesDetailSerializer(serializers.ModelSerializer):
 class PersonalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employees
-        fields = ['id','student_id','name','surname','department','position','check_in','check_out']
+        fields = ['id', 'student_id', 'name', 'surname', 'department', 'position', 'check_in', 'check_out']
 
 
 class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Devices
+        model = Device
         fields = '__all__'
 
 class DeviceDetailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Devices
+        model = Device
         fields = '__all__'

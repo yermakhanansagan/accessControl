@@ -66,6 +66,7 @@ class Device(models.Model):
     serial_number = models.CharField(max_length=30, null=True)
     device_model = models.CharField(max_length=30, null=True)
     is_out = models.CharField(max_length=30, null=True, choices=STATUS)
+    wait_time = models.IntegerField(default=2)
     check_out = models.DateTimeField(auto_now=True, null=True)
     def __str__(self):
         return self.device_ip

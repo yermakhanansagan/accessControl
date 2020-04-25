@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import User, History, Access
 
-# Register your models here.
+admin.site.register(User)
+admin.site.register(History)
+admin.site.register(Access)

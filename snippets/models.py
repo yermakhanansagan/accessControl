@@ -35,7 +35,7 @@ class Access(models.Model):
     card_id = models.CharField(primary_key=True, max_length=30, blank=True, unique=True, null=False)
     access = models.BooleanField(blank=True, default=False, null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-
+    registred_date = models.DateTimeField(auto_now_add=True, null=True)
     def __str__(self):
         return self.card_id
 

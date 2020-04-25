@@ -18,14 +18,36 @@ class Snippet(models.Model):
     class Meta:
         ordering = ['created']
 
-class History(models.Model):
+class User(models.Model):
     STATUS = (
-        ('IN','IN'),
-        ('OUT','OUT'),
+        ('Teacher', 'Teacher'),
+        ('Student', 'Student'),
     )
-    card_id = models.CharField(max_length=30,blank=True,unique=False,null=True)
-    status = models.CharField(max_length=30,null=True,choices=STATUS)
-    entry_date = models.DateTimeField(auto_now_add=True, null=True)
+    name = models.CharField(max_length=30, null=True)
+    surname = models.CharField(max_length=30, null=True)
+    status = models.CharField(max_length=30, null=True, choices=STATUS)
+    student_id = models.CharField(max_length=30, blank=True, unique=True, null=False)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    def __str__(self):
+        return self.name
+
+class Access(models.Model):
+    card_id = models.CharField(primary_key=True, max_length=30, blank=True, unique=True, null=False)
+    access = models.BooleanField(blank=True, default=False, null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.card_id
+
+
+class History(models.Model):
+    STATUS = (
+        ('IN', 'IN'),
+        ('OUT', 'OUT'),
+    )
+    status = models.CharField(max_length=30, null=True, choices=STATUS)
+    entry_date = models.DateTimeField(auto_now_add=True, null=True)
+    card = models.ForeignKey(Access, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.status

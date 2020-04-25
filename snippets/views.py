@@ -1,8 +1,10 @@
 from django.http import HttpResponse, JsonResponse
+from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from snippets.models import Snippet, History
-from snippets.serializers import SnippetSerializer, HistorySerializer
+from snippets.models import Snippet, History, Access
+from snippets.serializers import SnippetSerializer, HistorySerializer, AccessSerializer
+from django.core.exceptions import ObjectDoesNotExist
 
 @csrf_exempt
 def snippet_list(request):
@@ -57,8 +59,14 @@ def history_list(request):
 
     if request.method == 'POST':
         data = JSONParser().parse(request)
+        try:
+            access = Access.objects.get(card_id=data['card'])
+        except Access.DoesNotExist:
+            card_id = data['card']
+            access = Access.objects.create(card_id=card_id)
+            access.save()
         serializer = HistorySerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
+            return JsonResponse({"access":access.access}, status=201)
         return JsonResponse(serializer.errors, status=400)

@@ -1,8 +1,10 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from snippets.models import Snippet, History, Access
-from snippets.serializers import SnippetSerializer, HistorySerializer
+from rest_framework import generics
+from snippets.models import History, Employees, Access, Devices, Snippet
+from snippets.serializers import PersonalSerializer, EmployeesDetailSerializer, SnippetSerializer, HistorySerializer, DeviceSerializer, EmployeesSerializer
+
 
 @csrf_exempt
 def snippet_list(request):
@@ -68,3 +70,41 @@ def history_list(request):
             serializer.save()
             return JsonResponse({"access":access.access}, status=201)
         return JsonResponse(serializer.errors, status=400)
+
+
+class EmployeesCreateViewSet(generics.CreateAPIView):
+    serializer_class = EmployeesSerializer
+
+class EmployeesListViewSet(generics.ListAPIView):
+    # search_fields = ['name','surname','student_id']
+    # filter_backends = (filters.SearchFilter, )
+    # pagination_class = PostPageNumberPagination
+    serializer_class = EmployeesDetailSerializer
+    queryset = Employees.objects.all()
+    # permission_classes = (IsAuthenticated, )
+
+class EmployeesDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = EmployeesDetailSerializer
+    queryset = Employees.objects.all()
+    # permission_classes = (IsOwnerOrReadOnly, )
+
+class PersonalViewSet(generics.ListAPIView):
+    # search_fields = ['name','surname','student_id']
+    # filter_backends = (filters.SearchFilter, )
+    # pagination_class = PostPageNumberPagination
+    serializer_class = PersonalSerializer
+    queryset = Employees.objects.all()
+
+class DeviceViewSet(generics.ListAPIView):
+    # search_fields = ['device_model','serial_number','device_ip']
+    # filter_backends = (filters.SearchFilter, )
+    # pagination_class = PostPageNumberPagination
+    serializer_class = DeviceSerializer
+    queryset = Devices.objects.all()
+
+class DeviceCreateViewSet(generics.CreateAPIView):
+    serializer_class = DeviceSerializer
+
+class DeviceDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = DeviceSerializer
+    queryset = Devices.objects.all()

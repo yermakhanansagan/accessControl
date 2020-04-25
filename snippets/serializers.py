@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from snippets.models import Snippet, History, Access
+from snippets.models import History, Access, Employees, Devices, Snippet
 
 
 class SnippetSerializer(serializers.ModelSerializer):
@@ -15,4 +15,32 @@ class HistorySerializer(serializers.ModelSerializer):
 class AccessSerializer(serializers.ModelSerializer):
     class Meta:
         model = Access
+        fields = '__all__'
+
+class EmployeesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employees
+        fields = '__all__'
+
+class EmployeesDetailSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    class Meta:
+        model = Employees
+        fields = '__all__'
+
+
+class PersonalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employees
+        fields = ['id','student_id','name','surname','department','position','check_in','check_out']
+
+
+class DeviceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Devices
+        fields = '__all__'
+
+class DeviceDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Devices
         fields = '__all__'

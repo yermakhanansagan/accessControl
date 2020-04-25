@@ -17,3 +17,15 @@ class Snippet(models.Model):
 
     class Meta:
         ordering = ['created']
+
+class History(models.Model):
+    STATUS = (
+        ('IN','IN'),
+        ('OUT','OUT'),
+    )
+    card_id = models.CharField(max_length=30,blank=True,unique=False,null=True)
+    status = models.CharField(max_length=30,null=True,choices=STATUS)
+    entry_date = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.card_id

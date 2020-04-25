@@ -1,8 +1,8 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from snippets.models import Snippet
-from snippets.serializers import SnippetSerializer
+from snippets.models import Snippet, History
+from snippets.serializers import SnippetSerializer, HistorySerializer
 
 @csrf_exempt
 def snippet_list(request):
@@ -47,3 +47,18 @@ def snippet_detail(request, pk):
     elif request.method == 'DELETE':
         snippet.delete()
         return HttpResponse(status=204)
+
+@csrf_exempt
+def history_list(request):
+    if request.method == 'GET':
+        history = History.objects.all()
+        serializer = HistorySerializer(history, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = HistorySerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)

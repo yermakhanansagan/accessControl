@@ -80,4 +80,4 @@ class History(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.device.__str__() + " " + self.card.__str__() + " " + self.entry_date
+        return self.entry_date

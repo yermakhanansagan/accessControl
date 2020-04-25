@@ -68,7 +68,7 @@ class Device(models.Model):
     is_out = models.CharField(max_length=30, null=True, choices=STATUS)
     check_out = models.DateTimeField(auto_now=True, null=True)
     def __str__(self):
-        return self.device_ip + ": " + is_out
+        return self.device_ip + ": " + self.is_out
 
 class History(models.Model):
     STATUS = (
@@ -80,4 +80,4 @@ class History(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.device.__str__() + " " + self.card.__str__ + " " + self.entry_date
+        return self.device.__str__() + " " + self.card.__str__() + " " + self.entry_date
